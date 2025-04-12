@@ -11,6 +11,7 @@ import GUI from "lil-gui";
 const gui = new GUI();
 const debugObject = {
   size: 0.5,
+  tube: 0.1,
 };
 
 // Canvas
@@ -53,20 +54,21 @@ fontLoader.load("/textures/fonts/Fira Code_Regular.json", (font) => {
   scene.add(mesh);
 
   const donutGeometry = new THREE.TorusGeometry(0.3, 0.1, 20, 45);
+  const donutMeshs = [];
   for (let i = 0; i < 300; i++) {
-    
     const donut = new THREE.Mesh(donutGeometry, material);
-    donut.position.x = (Math.random() - 0.5) * 10
-    donut.position.y = (Math.random() - 0.5) * 10
-    donut.position.z = (Math.random() - 0.5) * 10
+    donut.position.x = (Math.random() - 0.5) * 10;
+    donut.position.y = (Math.random() - 0.5) * 10;
+    donut.position.z = (Math.random() - 0.5) * 10;
 
-    donut.rotation.x = Math.random() * Math.PI
-    donut.rotation.y = Math.random() * Math.PI
+    donut.rotation.x = Math.random() * Math.PI;
+    donut.rotation.y = Math.random() * Math.PI;
 
-    const scale = Math.random()
-    donut.scale.set(scale, scale, scale)
-    
+    const scale = Math.random();
+    donut.scale.set(scale, scale, scale);
+
     scene.add(donut);
+    donutMeshs.push(donut);
   }
 
   // Debug UI
@@ -82,6 +84,25 @@ fontLoader.load("/textures/fonts/Fira Code_Regular.json", (font) => {
         "Hello Game1024！",
         textGeometryAttribute
       );
+      mesh.geometry.center();
+    });
+
+  gui
+    .add(debugObject, "tube")
+    .min(0.05)
+    .max(0.3)
+    .step(0.001)
+    .onFinishChange((value) => {
+      donutGeometry.dispose();
+      const geometry = new THREE.TorusGeometry(
+        0.3,
+        debugObject.tube,
+        20,
+        45
+      );
+      for (let index in donutMeshs) {
+        donutMeshs[index].geometry = geometry
+      }
     });
 });
 
