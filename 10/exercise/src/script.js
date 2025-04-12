@@ -19,6 +19,7 @@ loadingManager.onProgress = () => {
 loadingManager.onError = () => {
   console.log("loading error");
 };
+
 const textureLoader = new THREE.TextureLoader(loadingManager);
 const colorTexture = textureLoader.load("/textures/door/color.jpg");
 const alphaTexture = textureLoader.load("/textures/door/alpha.jpg");

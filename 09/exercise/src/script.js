@@ -8,6 +8,7 @@ import GUI from "lil-gui";
  */
 const gui = new GUI();
 const debugObject = {
+  scale: 1,
   color: "#ff0000",
 };
 
@@ -22,16 +23,43 @@ const scene = new THREE.Scene();
 /**
  * Object
  */
-const geometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2);
+const geometry = new THREE.BoxGeometry(
+  debugObject.scale,
+  debugObject.scale,
+  debugObject.scale,
+  2,
+  2,
+  2
+);
 const material = new THREE.MeshBasicMaterial({ color: debugObject.color });
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
 
 gui.add(material, "wireframe");
+gui
+  .add(debugObject, "scale")
+  .name("缩放")
+  .min(1)
+  .max(5)
+  .step(0.1)
+  .onFinishChange(() => {
+    geometry.dispose();
+    mesh.geometry = new THREE.BoxGeometry(
+      debugObject.scale,
+      debugObject.scale,
+      debugObject.scale,
+      2,
+      2,
+      2
+    );
+  });
 
-gui.addColor(debugObject, "color").onChange(() => {
-  material.color.set(debugObject.color);
-});
+gui
+  .addColor(debugObject, "color")
+  .name("颜色")
+  .onChange(() => {
+    material.color.set(debugObject.color);
+  });
 
 /**
  * Sizes
